@@ -1,0 +1,138 @@
+import bpy
+import math
+
+
+# Створенняя основної частини корпусу 
+bpy.ops.mesh.primitive_cube_add(calc_uvs = True,
+                                enter_editmode = False, 
+                                align = 'WORLD', 
+                                location = (0.0, 0.0, 6.0),
+                                rotation = (0.0, 0.0, 0.0),
+                                scale = (14.0, 8.0, 3.0))
+base_lower = bpy.context.object
+base_lower.name = "Корпус (нижня частина)"
+
+
+# Створення колісної бази 4x4
+
+# -- Колесо №1
+bpy.ops.mesh.primitive_cylinder_add(align = 'WORLD',
+                                    location = (8.0, 7.5, 3.0),
+                                    rotation = (math.pi / 2, 0.0, 0.0),
+                                    scale = (3.0, 3.0, 2))
+wheel_1 = bpy.context.object
+wheel_1.name = "Колесо №1 (ліве переднє)"
+
+
+# -- Колесо №2
+bpy.ops.mesh.primitive_cylinder_add(align = 'WORLD',
+                                    location = (8.0, -7.5, 3.0),
+                                    rotation = (math.pi / 2, 0.0, 0.0),
+                                    scale = (3.0, 3.0, 2))
+wheel_2 = bpy.context.object
+wheel_2.name = "Колесо №2 (праве переднє)"
+
+
+# -- Колесо №3
+bpy.ops.mesh.primitive_cylinder_add(align = 'WORLD',
+                                    location = (-8.0, 7.5, 3.0),
+                                    rotation = (math.pi / 2, 0.0, 0.0),
+                                    scale = (3.0, 3.0, 2))
+wheel_3 = bpy.context.object
+wheel_3.name = "Колесо №3 (ліве заднє)"
+
+
+# -- Колесо №4 
+bpy.ops.mesh.primitive_cylinder_add(align = 'WORLD',
+                                    location = (-8.0, -7.5, 3.0),
+                                    rotation = (math.pi / 2, 0.0, 0.0),
+                                    scale = (3.0, 3.0, 2))
+wheel_4 = bpy.context.object
+wheel_4.name = "Колесо №4 (праве заднє)"
+
+
+# Створення верхньої частини корпусу (усічена піраміда)
+bpy.ops.mesh.primitive_cone_add(vertices = 4,
+                                radius2 = 0.4, 
+                                depth = 1,
+                                end_fill_type = 'NGON',
+                                calc_uvs = True, 
+                                align = 'WORLD',
+                                location = (0.0, 0.0, 12.5),
+                                rotation = (0.0, 0.0, math.pi / 4),
+                                scale = (9.0, 9.0, 7.0))
+base_upper = bpy.context.object
+base_upper.name = "Корпус (верхня частина)"
+
+
+# Створення камер
+
+# Створення першої передньої камери у формі паралелепіпеда
+bpy.ops.mesh.primitive_cube_add(calc_uvs = True, 
+                                enter_editmode = False,
+                                align = 'WORLD',
+                                location = (11.0, 6.0, 10.25),
+                                rotation = (0.0, 0.0, 0.0),
+                                scale = (2.0, 1.25, 1.25))
+camera_1 = bpy.context.object
+camera_1.name = "Камера №1 (перша передня)"
+
+
+# Створення другої передньої камери у формі паралелепіпеда
+bpy.ops.mesh.primitive_cube_add(calc_uvs = True, 
+                                enter_editmode = False,
+                                align = 'WORLD',
+                                location = (11.0, -6.0, 10.25),
+                                rotation = (0.0, 0.0, 0.0),
+                                scale = (2.0, 1.25, 1.25))
+camera_2 = bpy.context.object
+camera_2.name = "Камера №2 (друга передня)"
+
+
+# Створення задньої камери у формі паралелепіпеда
+bpy.ops.mesh.primitive_cube_add(calc_uvs = True, 
+                                enter_editmode = False,
+                                align = 'WORLD',
+                                location = (-11.0, 0.0, 10.25),
+                                rotation = (0.0, 0.0, 0.0),
+                                scale = (2.0, 1.25, 1.25))
+camera_3 = bpy.context.object
+camera_3.name = "Камера №3 (задня)"
+
+
+# Створення освітлення
+
+# Освітлення №1 (+X+Y+Z, Blue)
+light = bpy.data.lights.new(name = "Blue_Light", type = 'POINT')
+
+light.energy = 300
+
+lightObj1 = bpy.data.objects.new(name = "Синє світло",
+                                 object_data = light)
+bpy.context.collection.objects.link(lightObj1)
+lightObj1.data.color = (0.0, 0.0, 255.0)
+lightObj1.location = (20, 20, 30)
+
+
+# Освітлення №2 (+X-Y+Z, Yellow)
+light = bpy.data.lights.new(name = "Yellow_Light", type = 'POINT')
+
+light.energy = 300
+
+lightObj2 = bpy.data.objects.new(name = "Жовте світло",
+                                 object_data = light)
+bpy.context.collection.objects.link(lightObj2)
+lightObj2.data.color = (255.0, 255.0, 0.0)
+lightObj2.location = (20, -20, 30)
+
+
+# Освітлення №3 (-X+Y+Z, Orange)
+light = bpy.data.lights.new(name = "Orange_Light", type = 'POINT')
+
+light.energy = 300
+
+lightObj3 = bpy.data.objects.new(name = "Помаранчеве світло",
+                                 object_data = light)
+bpy.context.collection.objects.link(lightObj3)
+lightObj3.data.color = (255.0, 69.0, 0.0)
+lightObj3.location = (-20, 20, 30)
